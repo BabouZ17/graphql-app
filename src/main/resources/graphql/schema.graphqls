@@ -1,0 +1,19 @@
+type Query {
+    gameById(id: ID): GameDTO,
+    games: [GameDTO]
+    studios: [StudioDTO]
+}
+
+type GameDTO {
+    id: ID!
+    title: String!
+    type: String!
+    platform: String!
+    studio: StudioDTO!
+}
+
+type StudioDTO {
+    id: ID!
+    name: String!
+    games: [GameDTO]
+}
