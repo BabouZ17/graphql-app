@@ -1,11 +1,14 @@
 package com.example.games.dto;
 
-import javax.validation.constraints.NotBlank;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @Data
 @Setter
@@ -26,5 +29,8 @@ public class GameDTO {
     private String platform;
 
     @NotBlank(message = "studio is required.")
-    private String studio;
+    private StudioDTO studio;
+
+    @NotNull
+    private List<ReviewDTO> reviews = new ArrayList<ReviewDTO>();
 }

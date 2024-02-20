@@ -1,9 +1,9 @@
 package com.example.games.controller;
 
 import com.example.games.repository.StudioRepository;
-import com.example.games.exception.ResourceNotFoundException;
 import com.example.games.model.Studio;
 import com.example.games.dto.StudioDTO;
+import com.example.games.exceptions.ResourceNotFoundException;
 import com.example.games.dto.CreateStudioDTO;
 import com.example.games.mapper.StudioMapper;
 
@@ -20,9 +20,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
+@RequestMapping("studios")
 public class RestStudioController {
 
     @Autowired
@@ -31,29 +33,29 @@ public class RestStudioController {
     @Autowired
     private StudioMapper mapper;
 
-    @GetMapping("/studios/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<StudioDTO> getStudio(@PathVariable String id) {
         Optional<Studio> studio = studioRepository.findById(id);
         if (!studio.isPresent()) {
-            throw new ResourceNotFoundException(String.format("Studio with %s does not exist", id.toString()));
+            throw new ResourceNotFoundException();
         }
-        StudioDTO retrievedStudio = StudioMapper.fromStudiotoStudioDTO(studio.get());
+        StudioDTO retrievedStudio = this.mapper.fromStudiotoStudioDTO(studio.get());
         return new ResponseEntity<>(retrievedStudio, HttpStatus.OK);
     }
 
-    @GetMapping("/studios")
+    @GetMapping
     public ResponseEntity<List<StudioDTO>> getAllStudios() {
         List<StudioDTO> studios = studioRepository.findAll().stream()
-                .map((studio) -> StudioMapper.fromStudiotoStudioDTO(studio))
+                .map((studio) -> this.mapper.fromStudiotoStudioDTO(studio))
                 .collect(Collectors.toList());
         return new ResponseEntity<>(studios, HttpStatus.OK);
     }
 
-    @PostMapping("/studios")
+    @PostMapping
     public ResponseEntity<StudioDTO> saveStudio(@Valid @RequestBody CreateStudioDTO studioDTO) {
         Studio studio = StudioMapper.fromCreateStudioDTOtoStudio(studioDTO);
         Studio savedStudio = studioRepository.save(studio);
-        StudioDTO createdStudio = StudioMapper.fromStudiotoStudioDTO(savedStudio);
+        StudioDTO createdStudio = this.mapper.fromStudiotoStudioDTO(savedStudio);
 
         return new ResponseEntity<>(createdStudio, HttpStatus.CREATED);
     }

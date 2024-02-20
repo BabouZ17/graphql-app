@@ -11,9 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.CascadeType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "game")
@@ -38,6 +43,9 @@ public class Game {
     private String platform;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "studio_id")
+    @JoinColumn(name = "studio_id", nullable = false)
     private Studio studio;
+
+    @OneToMany(mappedBy = "game", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<Review>();
 }

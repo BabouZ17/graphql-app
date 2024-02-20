@@ -16,17 +16,20 @@ import java.util.stream.Collectors;
 @Component
 public class StudioMapper {
 
-    @Autowired
-    private GameMapper mapper;
+    private GameMapper gameMapper;
 
-    public static StudioDTO fromStudiotoStudioDTO(Studio studio) {
+    public StudioMapper(GameMapper mapper) {
+        this.gameMapper = mapper;
+    }
+
+    public StudioDTO fromStudiotoStudioDTO(Studio studio) {
         StudioDTO studioDTO = new StudioDTO();
         studioDTO.setId(studio.getId());
         studioDTO.setName(studio.getName());
         List<GameDTO> gamesDTO = studio
                 .getGames()
                 .stream()
-                .map((game) -> GameMapper.fromGametoGameDTO(game))
+                .map((game) -> this.gameMapper.fromGametoGameDTO(game))
                 .collect(
                         Collectors.toList());
 

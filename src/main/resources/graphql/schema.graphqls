@@ -10,10 +10,25 @@ type GameDTO {
     type: String!
     platform: String!
     studio: StudioDTO!
+    reviews: [ReviewDTO]!
+    players: [PlayerDTO]
+}
+
+type ReviewDTO {
+    id: ID!
+    numberOfStars: Int!
+    comment: String!
+    game: GameDTO!
+}
+
+type PlayerDTO {
+    id: ID!
+    firstName: String!
+    lastName: String!
 }
 
 type StudioDTO {
     id: ID!
     name: String!
-    games: [GameDTO]
+    games: [GameDTO]!
 }
