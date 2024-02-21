@@ -27,9 +27,12 @@ public class GameMapper {
         StudioDTO studio = new StudioDTO();
         studio.setId(game.getStudio().getId());
         studio.setName(game.getStudio().getName());
+        studio.setGames(null);
         gameDTO.setStudio(studio);
 
-        List<ReviewDTO> reviews = game.getReviews().stream()
+        List<ReviewDTO> reviews = game
+                .getReviews()
+                .stream()
                 .map((r) -> new ReviewDTO(
                         r.getId(),
                         r.getNumberOfStars(),
@@ -39,7 +42,7 @@ public class GameMapper {
         return gameDTO;
     }
 
-    public static Game fromCreateGameDTOtoGame(CreateGameDTO gameDTO, Studio studio) {
+    public Game fromCreateGameDTOtoGame(CreateGameDTO gameDTO, Studio studio) {
         Game game = new Game();
         game.setTitle(gameDTO.getTitle());
         game.setPlatform(gameDTO.getPlatform());

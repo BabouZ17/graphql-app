@@ -1,3 +1,10 @@
 # A spring boot application using GraphQL
 
-## Work in progress
+## Run the application
+
+
+## Graphiql 
+To play with the graphql engine, open http://localhost:8080/graphiql?path=/graphql in your browser.
+
+### Examples:
+![missing image](./docs/graphiql.png)

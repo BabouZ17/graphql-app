@@ -1,5 +1,6 @@
 package com.example.games.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class GraphGameDTO {
 
     @NotBlank
@@ -32,8 +34,8 @@ public class GraphGameDTO {
     private String platform;
 
     @NotNull
-    private StudioDTO studio;
+    private GraphStudioDTO studio;
 
     @NotNull
-    private List<ReviewDTO> reviews = new ArrayList<ReviewDTO>();
+    private List<GraphReviewDTO> reviews = new ArrayList<GraphReviewDTO>();
 }

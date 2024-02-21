@@ -1,6 +1,5 @@
 package com.example.games.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.example.games.dto.StudioDTO;
@@ -15,29 +14,26 @@ import java.util.stream.Collectors;
 
 @Component
 public class StudioMapper {
-
-    private GameMapper gameMapper;
-
-    public StudioMapper(GameMapper mapper) {
-        this.gameMapper = mapper;
-    }
-
     public StudioDTO fromStudiotoStudioDTO(Studio studio) {
         StudioDTO studioDTO = new StudioDTO();
         studioDTO.setId(studio.getId());
         studioDTO.setName(studio.getName());
-        List<GameDTO> gamesDTO = studio
+        List<GameDTO> games = studio
                 .getGames()
                 .stream()
-                .map((game) -> this.gameMapper.fromGametoGameDTO(game))
+                .map((game) -> new GameDTO(
+                        game.getId(),
+                        game.getTitle(),
+                        game.getType().toString(),
+                        game.getPlatform()))
                 .collect(
                         Collectors.toList());
 
-        studioDTO.setGames(gamesDTO);
+        studioDTO.setGames(games);
         return studioDTO;
     }
 
-    public static Studio fromCreateStudioDTOtoStudio(CreateStudioDTO studioDTO) {
+    public Studio fromCreateStudioDTOtoStudio(CreateStudioDTO studioDTO) {
         Studio studio = new Studio();
         studio.setName(studioDTO.getName());
         studio.setGames(new ArrayList<Game>());

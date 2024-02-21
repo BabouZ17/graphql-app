@@ -8,15 +8,16 @@ import org.springframework.stereotype.Controller;
 
 import com.example.games.model.Game;
 import com.example.games.model.Studio;
-import com.example.games.dto.GameDTO;
-import com.example.games.dto.StudioDTO;
-import com.example.games.dto.PlayerDTO;
-import com.example.games.mapper.GameMapper;
-import com.example.games.mapper.StudioMapper;
+import com.example.games.dto.GraphGameDTO;
+import com.example.games.dto.GraphStudioDTO;
+import com.example.games.dto.GraphPlayerDTO;
+import com.example.games.mapper.GraphGameMapper;
+import com.example.games.mapper.GraphStudioMapper;
 import com.example.games.repository.GameRepository;
 import com.example.games.repository.StudioRepository;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,36 +30,39 @@ public class GraphqlGameController {
     private StudioRepository studioRepository;
 
     @Autowired
-    private StudioMapper studioMapper;
+    private GraphStudioMapper studioMapper;
 
     @Autowired
-    private GameMapper gameMapper;
+    private GraphGameMapper gameMapper;
 
     @QueryMapping
-    public GameDTO gameById(@Argument String id) {
+    public GraphGameDTO gameById(@Argument String id) {
         Optional<Game> game = gameRepository.findById(id);
         if (!game.isPresent()) {
             throw new IllegalStateException(String.format("Game with %s does not exist", id.toString()));
         }
-        return this.gameMapper.fromGametoGameDTO(game.get());
+        return this.gameMapper.map(game.get());
     }
 
     @QueryMapping
-    public Iterable<GameDTO> games() {
+    public Iterable<GraphGameDTO> games() {
         List<Game> games = gameRepository.findAll();
-        return games.stream().map((game) -> this.gameMapper.fromGametoGameDTO(game)).collect(Collectors.toList());
+        return games.stream().map((game) -> this.gameMapper.map(game)).collect(Collectors.toList());
     }
 
     @QueryMapping
-    public Iterable<StudioDTO> studios() {
+    public Iterable<GraphStudioDTO> studios() {
         List<Studio> studios = studioRepository.findAll();
-        return studios.stream().map((studio) -> this.studioMapper.fromStudiotoStudioDTO(studio))
+        return studios.stream().map((studio) -> this.studioMapper.map(studio))
                 .collect(Collectors.toList());
     }
 
     @SchemaMapping
-    public Iterable<PlayerDTO> players(GameDTO gameDTO) {
+    public Iterable<GraphPlayerDTO> players(GraphGameDTO gameDTO) {
         // Not persisted into DB
-        return PlayerDTO.players();
+        return GraphPlayerDTO.players()
+                .stream()
+                .limit(new Random().nextInt(GraphPlayerDTO.players().size() + 1))
+                .toList();
     }
 }

@@ -18,7 +18,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 
 @Entity
-@Table
+@Table(name = "studio")
 @Setter
 @Getter
 @NoArgsConstructor

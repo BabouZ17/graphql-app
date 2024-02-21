@@ -64,7 +64,7 @@ public class RestGameController {
                     "Could not save the game, studio: " + gameDTO.getStudio() + " does not exist");
         }
 
-        Game game = GameMapper.fromCreateGameDTOtoGame(gameDTO, studio.get());
+        Game game = this.mapper.fromCreateGameDTOtoGame(gameDTO, studio.get());
         Game savedGame = gameRepository.save(game);
         GameDTO newGame = this.mapper.fromGametoGameDTO(savedGame);
         return new ResponseEntity<>(newGame, HttpStatus.CREATED);

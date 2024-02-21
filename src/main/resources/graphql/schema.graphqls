@@ -1,34 +1,34 @@
 type Query {
-    gameById(id: ID): GameDTO,
-    games: [GameDTO]
-    studios: [StudioDTO]
+    gameById(id: ID): GraphGameDTO,
+    games: [GraphGameDTO]
+    studios: [GraphStudioDTO]
 }
 
-type GameDTO {
+type GraphGameDTO {
     id: ID!
     title: String!
     type: String!
     platform: String!
-    studio: StudioDTO!
-    reviews: [ReviewDTO]!
-    players: [PlayerDTO]
+    studio: GraphStudioDTO!
+    reviews: [GraphReviewDTO]!
+    players: [GraphPlayerDTO]
 }
 
-type ReviewDTO {
+type GraphReviewDTO {
     id: ID!
     numberOfStars: Int!
     comment: String!
-    game: GameDTO!
+    game: GraphGameDTO!
 }
 
-type PlayerDTO {
+type GraphPlayerDTO {
     id: ID!
     firstName: String!
     lastName: String!
 }
 
-type StudioDTO {
+type GraphStudioDTO {
     id: ID!
     name: String!
-    games: [GameDTO]!
+    games: [GraphGameDTO]!
 }

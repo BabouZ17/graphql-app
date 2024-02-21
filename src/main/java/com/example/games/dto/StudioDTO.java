@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import jakarta.validation.constraints.NotBlank;
 
@@ -21,5 +22,5 @@ public class StudioDTO {
     private String name;
 
     @NotBlank(message = "games are required.")
-    private List<GameDTO> games;
+    private List<GameDTO> games = new ArrayList<GameDTO>();
 }

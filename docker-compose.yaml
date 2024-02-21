@@ -1,5 +1,15 @@
 version: "3.7"
 services:
+  graphql-app:
+    build:
+      context: .
+      args:
+        - JAR_FILE=./target/games-0.0.1-SNAPSHOT.jar
+        - CONFIG_FILE_NAME=application-within-docker.yaml
+    restart: always
+    container_name: graphql-app
+    ports:
+      - 8080:8080
   postgres:
     image: postgres
     restart: always

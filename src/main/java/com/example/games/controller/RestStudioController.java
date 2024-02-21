@@ -53,7 +53,7 @@ public class RestStudioController {
 
     @PostMapping
     public ResponseEntity<StudioDTO> saveStudio(@Valid @RequestBody CreateStudioDTO studioDTO) {
-        Studio studio = StudioMapper.fromCreateStudioDTOtoStudio(studioDTO);
+        Studio studio = this.mapper.fromCreateStudioDTOtoStudio(studioDTO);
         Studio savedStudio = studioRepository.save(studio);
         StudioDTO createdStudio = this.mapper.fromStudiotoStudioDTO(savedStudio);
 
