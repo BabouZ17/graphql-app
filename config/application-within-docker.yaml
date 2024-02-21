@@ -1,0 +1,11 @@
+spring:
+    graphql:
+        graphiql:
+            enabled: true
+    datasource:
+        url: jdbc:postgresql://postgres:5432/games
+        username: admin
+        password: admin
+    jpa:
+        hibernate:
+            ddl-auto: create
