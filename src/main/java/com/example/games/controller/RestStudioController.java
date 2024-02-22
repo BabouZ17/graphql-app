@@ -15,13 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.stream.Collectors;
+import java.util.List;
 
 @RestController
 @RequestMapping("studios")
@@ -35,11 +34,11 @@ public class RestStudioController {
 
     @GetMapping("/{id}")
     public ResponseEntity<StudioDTO> getStudio(@PathVariable String id) {
-        Optional<Studio> studio = studioRepository.findById(id);
-        if (!studio.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        StudioDTO retrievedStudio = this.mapper.fromStudiotoStudioDTO(studio.get());
+        Studio studio = studioRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Studio: " + id + " does not exist"));
+
+        StudioDTO retrievedStudio = this.mapper.fromStudiotoStudioDTO(studio);
         return new ResponseEntity<>(retrievedStudio, HttpStatus.OK);
     }
 
@@ -52,11 +51,10 @@ public class RestStudioController {
     }
 
     @PostMapping
-    public ResponseEntity<StudioDTO> saveStudio(@Valid @RequestBody CreateStudioDTO studioDTO) {
+    public ResponseEntity<StudioDTO> saveStudio(@RequestBody @Valid CreateStudioDTO studioDTO) {
         Studio studio = this.mapper.fromCreateStudioDTOtoStudio(studioDTO);
         Studio savedStudio = studioRepository.save(studio);
         StudioDTO createdStudio = this.mapper.fromStudiotoStudioDTO(savedStudio);
-
         return new ResponseEntity<>(createdStudio, HttpStatus.CREATED);
     }
 }

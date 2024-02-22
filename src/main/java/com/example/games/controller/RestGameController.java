@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import jakarta.validation.Valid;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("games")
@@ -41,11 +40,11 @@ public class RestGameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<GameDTO> getGame(@PathVariable String id) {
-        Optional<Game> game = gameRepository.findById(id);
-        if (!game.isPresent()) {
-            throw new ResourceNotFoundException();
-        }
-        GameDTO retrievedGame = this.mapper.fromGametoGameDTO(game.get());
+        Game game = gameRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Game: " + id + " does not exist"));
+
+        GameDTO retrievedGame = this.mapper.fromGametoGameDTO(game);
         return new ResponseEntity<>(retrievedGame, HttpStatus.OK);
     }
 
@@ -57,14 +56,13 @@ public class RestGameController {
     }
 
     @PostMapping
-    public ResponseEntity<GameDTO> saveGame(@Valid @RequestBody CreateGameDTO gameDTO) {
-        Optional<Studio> studio = studioRepository.findById(gameDTO.getStudio());
-        if (!studio.isPresent()) {
-            throw new BadRequestException(
-                    "Could not save the game, studio: " + gameDTO.getStudio() + " does not exist");
-        }
+    public ResponseEntity<GameDTO> saveGame(@RequestBody @Valid CreateGameDTO gameDTO) {
+        Studio studio = studioRepository
+                .findById(gameDTO.getStudio())
+                .orElseThrow(() -> new BadRequestException(
+                        "Could not save the game, studio: " + gameDTO.getStudio() + " does not exist"));
 
-        Game game = this.mapper.fromCreateGameDTOtoGame(gameDTO, studio.get());
+        Game game = this.mapper.fromCreateGameDTOtoGame(gameDTO, studio);
         Game savedGame = gameRepository.save(game);
         GameDTO newGame = this.mapper.fromGametoGameDTO(savedGame);
         return new ResponseEntity<>(newGame, HttpStatus.CREATED);

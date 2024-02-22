@@ -16,7 +16,6 @@ import com.example.games.mapper.GraphStudioMapper;
 import com.example.games.repository.GameRepository;
 import com.example.games.repository.StudioRepository;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,11 +36,10 @@ public class GraphqlGameController {
 
     @QueryMapping
     public GraphGameDTO gameById(@Argument String id) {
-        Optional<Game> game = gameRepository.findById(id);
-        if (!game.isPresent()) {
-            throw new IllegalStateException(String.format("Game with %s does not exist", id.toString()));
-        }
-        return this.gameMapper.map(game.get());
+        Game game = gameRepository.findById(id)
+                .orElseThrow(
+                        () -> new IllegalStateException(String.format("Game with %s does not exist", id.toString())));
+        return this.gameMapper.map(game);
     }
 
     @QueryMapping

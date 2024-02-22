@@ -1,4 +1,7 @@
 package com.example.games.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(String msg) {
+        super(msg);
+    }
 }
